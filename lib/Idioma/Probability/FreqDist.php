@@ -67,7 +67,7 @@ class FreqDist
     /**
      * Increment this FreqDist's count for the given sample.
      *
-     * @param  $sample The sample whose count should be incremented.
+     * @param  string $sample The sample whose count should be incremented.
      *
      * @access public
      * @return void
