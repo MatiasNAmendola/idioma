@@ -79,22 +79,6 @@ class FreqDist
     }
 
     /**
-     * Update the frequency distribution with the provided list of samples.
-     * This is a faster way to add multiple samples to the distribution.
-     *
-     * @param  $samples The samples to add.
-     *
-     * @access public
-     * @return void
-     */
-    public function update($samples)
-    {
-        foreach ($samples as $sample) {
-            $this->inc($sample);
-        }
-    }
-
-    /**
      * Return the total number of sample outcomes that have been
      * recorded by this FreqDist. For the number of unique
      * sample values (or bins) with counts greater than zero,
@@ -123,6 +107,52 @@ class FreqDist
             $samples[$sample] = true;
         }
         return count($samples);
+    }
+
+    /**
+     * Return a list of all samples that have been recorded as
+     * outcomes by this frequency distribution.
+     *
+     * @access public
+     * @return array
+     */
+    public function samples()
+    {
+        return $this->samples;
+    }
+
+    /**
+     * Return a array of all samples that occur once (hapax legomena)
+     *
+     * @access public
+     * @return array
+     */
+    public function hapaxes()
+    {
+        $samples = [];
+        foreach ($this->samples() as $sample => $count) {
+            if ($count == 1) {
+                $samples[] = $sample;
+            }
+        }
+
+        return $samples;
+    }
+
+    /**
+     * Update the frequency distribution with the provided list of samples.
+     * This is a faster way to add multiple samples to the distribution.
+     *
+     * @param  $samples The samples to add.
+     *
+     * @access public
+     * @return void
+     */
+    public function update($samples)
+    {
+        foreach ($samples as $sample) {
+            $this->inc($sample);
+        }
     }
 
     /**
@@ -172,19 +202,15 @@ class FreqDist
     }
 
     /**
-     * Return a list of all samples that have been recorded as
-     * outcomes by this frequency distribution.
+     * Return the samples sorted in decreasing order of frequency.
      *
      * @access public
      * @return array
      */
-    public function samples($sort = false)
+    public function keys()
     {
-        $samples = $this->samples;
-        if ($sort === true) {
-            arsort($samples);
-        }
-
+        $samples = $this->samples();
+        arsort($samples);
         return $samples;
     }
 
